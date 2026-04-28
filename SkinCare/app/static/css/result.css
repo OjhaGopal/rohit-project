@@ -1,0 +1,24 @@
+body{
+    background-color: #E0C1B3;
+    font-family: 'Concert One', cursive;
+    /* font-family: 'Yanone Kaffeesatz', sans-serif; */
+}
+
+.box{
+    text-align: center;
+    background-color: lightcoral;
+    margin: 10% 30% 0;
+    padding: 10% 0 20%;
+    border-radius: 250px 250px 0 0;
+    color: darkslategray;
+    font-weight: bold;
+}
+
+h1{
+    font-size: 2rem;
+}
+
+h3{
+    font-size: 4rem;
+    text-transform: uppercase;
+}

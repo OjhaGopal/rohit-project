@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skin Neuro</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/result.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Concert+One&family=Righteous&family=Vina+Sans&family=Yanone+Kaffeesatz:wght@600&display=swap" rel="stylesheet">
+</head>
+<body>
+    
+    <div class="box">
+        {% if res %}
+            <h1 >YOUR RESULT</h1>
+            <h3>{{res}}</h3>
+        {% endif %}
+
+    </div>
+</body>
+</html>
+
+
+
