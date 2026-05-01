@@ -1,12 +1,15 @@
 from flask import request, render_template, redirect, url_for
 from werkzeug.utils import secure_filename
 from app import app
-import cv2
 import numpy as np
 from PIL import Image
 import os
+import sys
 import logging
 import tempfile
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+from numpy_inference import NumpyONNX
 
 ALLOWED_EXTENSIONS = {'jpg', 'jpeg', 'png', 'bmp', 'webp'}
 app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024
@@ -21,12 +24,12 @@ STD  = np.array([0.229, 0.224, 0.225], dtype=np.float32)
 
 def _load_model():
     model_path = os.path.join(os.path.dirname(__file__), '..', 'skin-model.onnx')
-    net = cv2.dnn.readNetFromONNX(model_path)
-    net.setPreferableBackend(cv2.dnn.DNN_BACKEND_OPENCV)
-    net.setPreferableTarget(cv2.dnn.DNN_TARGET_CPU)
-    return net
+    print("Loading model...")
+    m = NumpyONNX(model_path)
+    print("Model ready!")
+    return m
 
-net = _load_model()
+model = _load_model()
 
 def _allowed(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -36,9 +39,8 @@ def _predict(img):
     arr = np.array(img, dtype=np.float32) / 255.0
     arr = (arr - MEAN) / STD
     arr = arr.transpose(2, 0, 1)[np.newaxis, ...].astype(np.float32)
-    net.setInput(arr)
-    out = net.forward()[0]
-    probs = np.exp(out) / np.sum(np.exp(out))
+    out = model.run(arr)[0]
+    probs = np.exp(out - out.max()) / np.sum(np.exp(out - out.max()))
     idx = int(np.argmax(probs))
     return CLASSES[idx], float(probs[idx])
 
